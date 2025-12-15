@@ -13,7 +13,7 @@ namespace FileEncryptor.Core.Interfaces
     /// <remarks>Implementations of this interface provide methods to process files using cryptographic
     /// algorithms, such as encryption or decryption, in an asynchronous manner. The interface supports progress
     /// reporting and cancellation.</remarks>
-    internal interface ICryptoService
+    public interface ICryptoService
     {
         Task ProcessFileAsync(CryptoOptions options, IProgress<double> progress, CancellationToken cancellationToken);
     }

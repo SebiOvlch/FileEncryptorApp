@@ -5,8 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileEncryptor.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="File Encryptor" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Choose a file:" FontWeight="Bold"/>
+            <Grid Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtFilePath" IsReadOnly="True" Padding="5"/>
+                <Button Content="..." Width="40" Margin="5,0,0,0" Grid.Column="1" Click="BtnBrowse_Click"/>
+            </Grid>
+        </StackPanel>
+        
+        <GroupBox Header="Cryptography settings" Grid.Row="1" Margin="0,0,0,20">
+            <UniformGrid Columns="3" Margin="10">
+                <StackPanel Margin="5">
+                    <TextBlock Text="Algorithm:"/>
+                    <ComboBox x:Name="cbAlgorithm" SelectedIndex="0"/>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Cipher Mode:"/>
+                    <ComboBox x:Name="cbCipherMode" SelectedIndex="0"/>
+                </StackPanel>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Padding Mode:"/>
+                    <ComboBox x:Name="cbPaddingMode" SelectedIndex="0"/>
+                </StackPanel>
+            </UniformGrid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,20">
+            <TextBlock Text="Password:" FontWeight="Bold"/>
+            <TextBox x:Name="txtPassword" Margin="0,5,0,0" Padding="5"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" VerticalAlignment="Bottom">
+            <TextBlock x:Name="lblStatus" Text="Waiting..." HorizontalAlignment="Center" Margin="0,0,0,5"/>
+
+            <ProgressBar x:Name="progressBar" Height="20" Minimum="0" Maximum="100"/>
+
+            <Grid Margin="0,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnEncrypt" Content="🔒 Encrypt" Height="35" Click="BtnEncrypt_Click"/>
+                <Button x:Name="btnDecrypt" Content="🔓 Decrypt" Grid.Column="2" Height="35" Click="BtnDecrypt_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" Grid.Column="4" Width="80" IsEnabled="False" Click="BtnCancel_Click"/>
+            </Grid>
+        </StackPanel>
 
     </Grid>
 </Window>
