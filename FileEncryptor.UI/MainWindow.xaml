@@ -65,7 +65,7 @@
 
                 <Button x:Name="btnEncrypt" Content="🔒 Encrypt" Height="35" Click="BtnEncrypt_Click"/>
                 <Button x:Name="btnDecrypt" Content="🔓 Decrypt" Grid.Column="2" Height="35" Click="BtnDecrypt_Click"/>
-                <Button x:Name="btnCancel" Content="Cancel" Grid.Column="4" Width="80" IsEnabled="False" Click="BtnCancel_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" Grid.Column="4" Width="80" IsEnabled="False" Click="BtnCancel_Click" Cursor="Hand"/>
             </Grid>
         </StackPanel>
 
