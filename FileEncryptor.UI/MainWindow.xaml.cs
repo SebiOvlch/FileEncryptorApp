@@ -44,10 +44,22 @@ namespace FileEncryptor.UI
             cbPaddingMode.SelectedItem = PaddingMode.PKCS7;
         }
 
+
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if(openFileDialog.ShowDialog() == true)
+            {
+                txtFilePath.Text = openFileDialog.FileName;
+                lblStatus.Text = "The file is ready..";
+                progressBar.Value = 0;
+            }
+        }
+
+        private void txtFilePath_DoubleClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
             {
                 txtFilePath.Text = openFileDialog.FileName;
                 lblStatus.Text = "The file is ready..";
