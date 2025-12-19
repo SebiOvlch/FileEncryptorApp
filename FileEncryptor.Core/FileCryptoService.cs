@@ -28,7 +28,7 @@ namespace FileEncryptor.Core
                 using (FileStream destStream = new FileStream(options.OutputFilePath, FileMode.Create, FileAccess.Write))
                 {
                     byte[] passwordBytes = Encoding.UTF8.GetBytes(options.Password);
-                    ICryptoTransform transform = null;
+                    ICryptoTransform? transform = null;
 
                     // Encryption:
                     if(options.Action == CryptoAction.Encrypt)
@@ -37,7 +37,7 @@ namespace FileEncryptor.Core
                         byte[] salt = GenerateRandomBytes(saltSize);
 
                         // generate key and IV:
-                        using(var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000))
+                        using(var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
                         {
                             algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
                             algorithm.IV = keyDerivation.GetBytes(algorithm.BlockSize / 8);
@@ -49,7 +49,7 @@ namespace FileEncryptor.Core
 
                         transform = algorithm.CreateEncryptor();
                     }
-                    // Decription:
+                    // Decryption:
                     else
                     {
                         // Read the salt from the file:
@@ -63,7 +63,7 @@ namespace FileEncryptor.Core
                         if (ivRead < iv.Length) throw new Exception("Error: The file is too short (Missing IV)");
 
                         // Generating the key from the salt and the password:
-                        using (var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000))
+                        using (var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
                         {
                             algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
                             algorithm.IV = iv;

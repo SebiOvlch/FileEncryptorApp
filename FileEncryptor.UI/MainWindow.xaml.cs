@@ -158,6 +158,67 @@ namespace FileEncryptor.UI
         }
 
         #region UI
+
+        // Drag&Drop feature:
+        #region Drag & Drop
+        // when you drag the file above the TextBox:
+        private void txtFilePath_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+                e.Handled = true;
+
+                var txtBox = sender as TextBox;
+                if (txtBox != null)
+                {
+                    txtBox.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CC2FF"));
+                    txtBox.BorderThickness = new Thickness(2);
+                }
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        //when you drop the file:
+        private void txtFilePath_PreviewDrop(object sender, DragEventArgs e)
+        {
+            var txtBox = sender as TextBox;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (files != null && files.Length > 0 && txtBox != null)
+                {
+                    txtBox.Text = files[0];
+                }
+            }
+
+            if (txtBox != null)
+            {
+                ResetTextBoxStyle(txtBox);
+            }
+        }
+
+        // when you don't drop the file:
+        private void txtFilePath_DragLeave(object sender, DragEventArgs e)
+        {
+            var txtBox = sender as TextBox;
+            if (txtBox != null)
+                ResetTextBoxStyle(txtBox);
+        }
+
+        // helper to reset the style:
+        private void ResetTextBoxStyle(TextBox txtBox)
+        {
+            txtBox.ClearValue(Control.BorderBrushProperty);
+            txtBox.ClearValue(Control.BorderThicknessProperty);
+        }
+        #endregion
+
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

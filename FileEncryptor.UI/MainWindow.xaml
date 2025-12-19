@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:FileEncryptor.UI"
         mc:Ignorable="d"
         Title="File Encryptor" Height="500" Width="800"
+        MinHeight="500" MinWidth="700"
         MaxHeight="600" MaxWidth="900"
         WindowStartupLocation="CenterScreen"
         
@@ -127,11 +128,11 @@
                               MaxHeight="{TemplateBinding MaxDropDownHeight}">
 
                                     <Border x:Name="DropDownBorder"
-                                    Background="#2D2D30"
-                                    BorderThickness="1"
-                                    BorderBrush="#555555"
-                                    CornerRadius="8"
-                                    Margin="0,5,0,0">
+                                            Background="#2D2D30"
+                                            BorderThickness="1"
+                                            BorderBrush="#555555"
+                                            CornerRadius="8"
+                                            Margin="0,5,0,0">
                                         <Border.Effect>
                                             <DropShadowEffect Color="Black" BlurRadius="10" Opacity="0.5"/>
                                         </Border.Effect>
@@ -334,8 +335,8 @@
             Margin="10"
             MouseDown="Border_MouseDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="15"
-                              ShadowDepth="2"
+            <DropShadowEffect BlurRadius="20"
+                              ShadowDepth="3"
                               Direction="270"
                               Color="Black"
                               Opacity="0.5"/>
@@ -387,7 +388,13 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Style="{StaticResource ModernTextBox}" Tag="Choose a file..." x:Name="txtFilePath" MouseDoubleClick="txtFilePath_DoubleClick" IsReadOnly="True" Padding="5"/>
+                        <TextBox x:Name="txtFilePath" Style="{StaticResource ModernTextBox}" Tag="Choose or drop a file..." 
+                                 MouseDoubleClick="txtFilePath_DoubleClick" IsReadOnly="True" Padding="5"
+                                 
+                                 AllowDrop="True"
+                                 PreviewDragOver="txtFilePath_PreviewDragOver"
+                                 PreviewDrop="txtFilePath_PreviewDrop"
+                                 DragLeave="txtFilePath_DragLeave"/>
                         <Button Style="{StaticResource PrimaryButton}" 
                                 Content="Browse..." Foreground="LightGray"
                                 Width="75" Margin="5,0,5,0" Grid.Column="1" Click="BtnBrowse_Click"/>
