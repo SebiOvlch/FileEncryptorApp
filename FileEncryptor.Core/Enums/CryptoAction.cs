@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileEncryptor.Core.Models
+namespace FileEncryptor.Core.Enums
 {
     /// <summary>
     /// Specifies the cryptographic operation to perform, such as encryption or decryption.
     /// </summary>
     public enum CryptoAction
     {
+        Hashing,
         Encrypt,
         Decrypt
     }

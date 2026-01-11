@@ -1,7 +1,10 @@
 ﻿using FileEncryptor.Core;
+using FileEncryptor.Core.Enums;
 using FileEncryptor.Core.Interfaces;
 using FileEncryptor.Core.Models;
+using FileEncryptor.Core.Services;
 using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,8 +28,9 @@ namespace FileEncryptor.UI
     public partial class MainWindow : Window
     {
         private readonly ICryptoService _cryptoService = new FileCryptoService();
+        private readonly IHashService _hashService = new HashService();
 
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource? _cts;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,10 +42,12 @@ namespace FileEncryptor.UI
             cbAlgorithm.ItemsSource = Enum.GetValues(typeof(SupportedAlgorithm));
             cbCipherMode.ItemsSource = Enum.GetValues(typeof(CipherMode));
             cbPaddingMode.ItemsSource = Enum.GetValues(typeof(PaddingMode));
+            cbHashAlgo.ItemsSource = Enum.GetValues(typeof(HashType));
 
             cbAlgorithm.SelectedItem = SupportedAlgorithm.Aes;
             cbCipherMode.SelectedItem = CipherMode.CBC;
             cbPaddingMode.SelectedItem = PaddingMode.PKCS7;
+            cbHashAlgo.SelectedItem = HashType.SHA256;
         }
 
 
@@ -84,7 +90,7 @@ namespace FileEncryptor.UI
 
         private async Task ExecuteCryptoOperation(CryptoAction action)
         {
-            if(string.IsNullOrEmpty(txtFilePath.Text) || !File.Exists(txtFilePath.Text))
+            if (string.IsNullOrEmpty(txtFilePath.Text) || !File.Exists(txtFilePath.Text))
             {
                 MessageBox.Show("Please choose a valid and existing file!", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -103,6 +109,7 @@ namespace FileEncryptor.UI
                 Path.GetFileNameWithoutExtension(txtFilePath.Text) + suffix + Path.GetExtension(txtFilePath.Text)
             );
 
+
             var options = new CryptoOptions
             {
                 InputFilePath = txtFilePath.Text,
@@ -119,7 +126,7 @@ namespace FileEncryptor.UI
                 progressBar.Value = percent;
                 lblStatus.Text = $"{action} in progress... {percent:F0}%";
             });
-
+            
             _cts = new CancellationTokenSource();
 
             try
@@ -149,8 +156,10 @@ namespace FileEncryptor.UI
 
         private void ToggleControls(bool isEnabled)
         {
+            btnBrowse.IsEnabled = isEnabled;
             btnEncrypt.IsEnabled = isEnabled;
             btnDecrypt.IsEnabled = isEnabled;
+            btnSolveHashing.IsEnabled = isEnabled;
             btnCancel.IsEnabled = !isEnabled;
             txtFilePath.IsEnabled = isEnabled;
             txtPassword.IsEnabled = isEnabled;
@@ -228,6 +237,47 @@ namespace FileEncryptor.UI
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        #endregion
+
+        #region Hash Algorithms
+        private async void btnSolveHashing_Click(object sender, RoutedEventArgs e)
+        {
+            await ExecuteHashOperation();
+        }
+
+        private async Task ExecuteHashOperation()
+        {
+            if (string.IsNullOrEmpty(txtFilePath.Text) || !File.Exists(txtFilePath.Text))
+            {
+                MessageBox.Show("Please choose a valid and existing file!", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            ToggleControls(false);
+
+            string filePath = txtFilePath.Text;
+            HashType selectedAlgo = (HashType)cbHashAlgo.SelectedItem;
+
+            var progressHandler = new Progress<double>(percent =>
+            {
+                progressBar.Value = percent;
+                lblStatus.Text = $"{CryptoAction.Hashing} in progress... {percent:F0}%";
+            });
+
+            try
+            {
+                string hash = await _hashService.ComputeFileHashAsync(filePath, selectedAlgo);
+                txtHashResult.Text = hash;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+            finally
+            {
+                ToggleControls(true);
+            }
         }
         #endregion
     }

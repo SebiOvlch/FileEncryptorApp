@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileEncryptor.UI"
         mc:Ignorable="d"
-        Title="File Encryptor" Height="500" Width="800"
-        MinHeight="500" MinWidth="700"
-        MaxHeight="600" MaxWidth="900"
+        Title="File Encryptor" Height="650" Width="800"
+        MinHeight="650" MinWidth="800"
+        MaxHeight="800" MaxWidth="900"
         WindowStartupLocation="CenterScreen"
         
         WindowStyle="None"
@@ -395,7 +395,7 @@
                                  PreviewDragOver="txtFilePath_PreviewDragOver"
                                  PreviewDrop="txtFilePath_PreviewDrop"
                                  DragLeave="txtFilePath_DragLeave"/>
-                        <Button Style="{StaticResource PrimaryButton}" 
+                        <Button x:Name="btnBrowse" Style="{StaticResource PrimaryButton}" 
                                 Content="Browse..." Foreground="LightGray"
                                 Width="75" Margin="5,0,5,0" Grid.Column="1" Click="BtnBrowse_Click"/>
                     </Grid>
@@ -404,28 +404,72 @@
                 <GroupBox Header="Cryptography settings" Grid.Row="1" Margin="0,0,0,20" BorderThickness="0">
                     <UniformGrid Columns="3" Margin="10">
                         <StackPanel Margin="5">
-                            <TextBlock Text="Algorithm:"/>
+                            <TextBlock Text="Algorithm:" Foreground="Gray" FontSize="11"/>
                             <ComboBox x:Name="cbAlgorithm" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
                         </StackPanel>
                         <StackPanel Margin="5">
-                            <TextBlock Text="Cipher Mode:"/>
+                            <TextBlock Text="Cipher Mode:" Foreground="Gray" FontSize="11"/>
                             <ComboBox x:Name="cbCipherMode" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
                         </StackPanel>
                         <StackPanel Margin="5">
-                            <TextBlock Text="Padding Mode:"/>
+                            <TextBlock Text="Padding Mode:" Foreground="Gray" FontSize="11"/>
                             <ComboBox x:Name="cbPaddingMode" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
                         </StackPanel>
                     </UniformGrid>
                 </GroupBox>
 
-                <StackPanel Grid.Row="2" Margin="0,0,0,20">
+                <GroupBox Header="Hash Settings" Grid.Row="2" Margin="0,0,0,20" BorderThickness="0">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+                            <TextBlock Text="Algorithm:" Margin="0,0,0,5" Foreground="Gray"/>
+                            <ComboBox x:Name="cbHashAlgo" 
+                                Style="{StaticResource ModernComboBox}" 
+                                Height="30" 
+                                SelectedIndex="0" 
+                                HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                        <Button x:Name="btnSolveHashing" 
+                            Grid.Row="0" Grid.Column="1"
+                            Content="Get Hash" 
+                            Height="30" Width="120" 
+                            Style="{StaticResource PrimaryButton}" 
+                            Margin="0,0,0,10"
+                            VerticalAlignment="Bottom"
+                            Click="btnSolveHashing_Click"/>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                            <TextBlock Text="Hash Result:" Margin="0,0,0,5" Foreground="Gray" FontSize="11"/>
+
+                            <TextBox x:Name="txtHashResult" 
+                                 Style="{StaticResource ModernTextBox}" 
+                                 Tag="Result..." 
+                                 Padding="6"
+                                 IsReadOnly="True"
+                                 HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                    </Grid>
+                </GroupBox>
+
+                <StackPanel Grid.Row="3" Margin="0,0,0,20">
                     <TextBlock Text="Password:" FontWeight="Bold"/>
                     <TextBox Style="{StaticResource ModernTextBox}" Tag="Password..." 
                              FontSize="12" Width="250" HorizontalAlignment="Left"
                              x:Name="txtPassword" Margin="0,5,0,0" Padding="5"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="3" VerticalAlignment="Bottom">
+                <StackPanel Grid.Row="4" VerticalAlignment="Bottom">
                     <TextBlock x:Name="lblStatus" Text="Waiting..." HorizontalAlignment="Center" Margin="0,0,0,5"/>
 
                     <ProgressBar x:Name="progressBar" Style="{StaticResource ModernProgressBar}" Height="20" Minimum="0" Maximum="100"/>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using FileEncryptor.Core.Enums;
 
 namespace FileEncryptor.Core.Models
 {
@@ -16,9 +17,9 @@ namespace FileEncryptor.Core.Models
     public class CryptoOptions
     {
         // Properties
-        public string InputFilePath { get; set; }
-        public string OutputFilePath { get; set; }
-        public string Password { get; set; }
+        public string? InputFilePath { get; set; }
+        public string? OutputFilePath { get; set; }
+        public string? Password { get; set; }
         public SupportedAlgorithm Algorithm { get; set; }
         public CryptoAction Action { get; set; }
         public CipherMode Mode { get; set; }

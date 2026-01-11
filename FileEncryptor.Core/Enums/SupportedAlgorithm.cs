@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileEncryptor.Core.Models
+namespace FileEncryptor.Core.Enums
 {
     /// <summary>
     /// Specifies the set of symmetric encryption algorithms supported by the cryptographic API.    

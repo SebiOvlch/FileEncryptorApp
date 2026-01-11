@@ -4,10 +4,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FileEncryptor.Core.Enums;
 using FileEncryptor.Core.Interfaces;
 using FileEncryptor.Core.Models;
 
-namespace FileEncryptor.Core
+namespace FileEncryptor.Core.Services
 {
     public class FileCryptoService : ICryptoService
     {
@@ -24,54 +25,57 @@ namespace FileEncryptor.Core
                 algorithm.Mode = options.Mode;
                 algorithm.Padding = options.Padding;
 
-                using (FileStream sourceStream = new FileStream(options.InputFilePath, FileMode.Open, FileAccess.Read))
-                using (FileStream destStream = new FileStream(options.OutputFilePath, FileMode.Create, FileAccess.Write))
+                if (options.InputFilePath != null && options.OutputFilePath != null && options.Password != null)
                 {
-                    byte[] passwordBytes = Encoding.UTF8.GetBytes(options.Password);
-                    ICryptoTransform? transform = null;
-
-                    // Encryption:
-                    if(options.Action == CryptoAction.Encrypt)
+                    using (FileStream sourceStream = new FileStream(options.InputFilePath, FileMode.Open, FileAccess.Read))
+                    using (FileStream destStream = new FileStream(options.OutputFilePath, FileMode.Create, FileAccess.Write))
                     {
-                        // generate the Salt:
-                        byte[] salt = GenerateRandomBytes(saltSize);
+                        byte[] passwordBytes = Encoding.UTF8.GetBytes(options.Password);
+                        ICryptoTransform? transform = null;
 
-                        // generate key and IV:
-                        using(var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
+                        // Encryption:
+                        if (options.Action == CryptoAction.Encrypt)
                         {
-                            algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
-                            algorithm.IV = keyDerivation.GetBytes(algorithm.BlockSize / 8);
+                            // generate the Salt:
+                            byte[] salt = GenerateRandomBytes(saltSize);
+
+                            // generate key and IV:
+                            using (var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
+                            {
+                                algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
+                                algorithm.IV = keyDerivation.GetBytes(algorithm.BlockSize / 8);
+                            }
+
+                            // Write the salt and the IV on the first lines of the encrypted file!
+                            await destStream.WriteAsync(salt, 0, salt.Length);
+                            await destStream.WriteAsync(algorithm.IV, 0, algorithm.IV.Length);
+
+                            transform = algorithm.CreateEncryptor();
                         }
-
-                        // Write the salt and the IV on the first lines of the encrypted file!
-                        await destStream.WriteAsync(salt, 0, salt.Length);
-                        await destStream.WriteAsync(algorithm.IV, 0, algorithm.IV.Length);
-
-                        transform = algorithm.CreateEncryptor();
-                    }
-                    // Decryption:
-                    else
-                    {
-                        // Read the salt from the file:
-                        byte[] salt = new byte[saltSize];
-                        int saltRead = await sourceStream.ReadAsync(salt, 0, saltSize);
-                        if (saltRead < saltSize) throw new Exception("Error: The file is too short (Damaged header)");
-
-                        // Read the IV:
-                        byte[] iv = new byte[algorithm.BlockSize / 8];
-                        int ivRead = await sourceStream.ReadAsync(iv, 0, iv.Length);
-                        if (ivRead < iv.Length) throw new Exception("Error: The file is too short (Missing IV)");
-
-                        // Generating the key from the salt and the password:
-                        using (var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
+                        // Decryption:
+                        else
                         {
-                            algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
-                            algorithm.IV = iv;
-                        }
+                            // Read the salt from the file:
+                            byte[] salt = new byte[saltSize];
+                            int saltRead = await sourceStream.ReadAsync(salt, 0, saltSize);
+                            if (saltRead < saltSize) throw new Exception("Error: The file is too short (Damaged header)");
 
-                        transform = algorithm.CreateDecryptor();
+                            // Read the IV:
+                            byte[] iv = new byte[algorithm.BlockSize / 8];
+                            int ivRead = await sourceStream.ReadAsync(iv, 0, iv.Length);
+                            if (ivRead < iv.Length) throw new Exception("Error: The file is too short (Missing IV)");
+
+                            // Generating the key from the salt and the password:
+                            using (var keyDerivation = new Rfc2898DeriveBytes(passwordBytes, salt, 10000, HashAlgorithmName.SHA256))
+                            {
+                                algorithm.Key = keyDerivation.GetBytes(algorithm.KeySize / 8);
+                                algorithm.IV = iv;
+                            }
+
+                            transform = algorithm.CreateDecryptor();
+                        }
+                        await RunCryptoLoopAsync(sourceStream, destStream, transform, progress, cancellationToken);
                     }
-                    await RunCryptoLoopAsync(sourceStream, destStream, transform, progress, cancellationToken);
                 }
             }
         }
@@ -123,7 +127,9 @@ namespace FileEncryptor.Core
                 case SupportedAlgorithm.Aes: return Aes.Create();
                 case SupportedAlgorithm.Des: return DES.Create();
                 case SupportedAlgorithm.TripleDes: return TripleDES.Create();
+#pragma warning disable SYSLIB0022 // Type or member is obsolete
                 case SupportedAlgorithm.Rijndael: return Rijndael.Create();
+#pragma warning restore SYSLIB0022 // Type or member is obsolete
                 case SupportedAlgorithm.Rc2: return RC2.Create();
                 default: throw new NotSupportedException("The selected algorithm is not supported.");
             }

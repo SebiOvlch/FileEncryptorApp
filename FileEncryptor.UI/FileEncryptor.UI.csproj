@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>cyber-security.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="cyber-security.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FileEncryptor.Core\FileEncryptor.Core.csproj" />
