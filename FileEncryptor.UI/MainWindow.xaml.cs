@@ -5,6 +5,7 @@ using FileEncryptor.Core.Models;
 using FileEncryptor.Core.Services;
 using Microsoft.Win32;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ColorConverter = System.Windows.Media.ColorConverter;
 using Path = System.IO.Path;
 
 namespace FileEncryptor.UI
@@ -29,6 +31,8 @@ namespace FileEncryptor.UI
     {
         private readonly ICryptoService _cryptoService = new FileCryptoService();
         private readonly IHashService _hashService = new HashService();
+
+        private Bitmap _currentBitmap;
 
         private CancellationTokenSource? _cts;
         public MainWindow()
@@ -181,7 +185,7 @@ namespace FileEncryptor.UI
                 var txtBox = sender as TextBox;
                 if (txtBox != null)
                 {
-                    txtBox.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CC2FF"));
+                    txtBox.BorderBrush = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString("#4CC2FF"));
                     txtBox.BorderThickness = new Thickness(2);
                 }
             }
