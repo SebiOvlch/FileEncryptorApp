@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileEncryptor.UI"
         mc:Ignorable="d"
-        Title="File Encryptor" Height="650" Width="800"
-        MinHeight="650" MinWidth="800"
-        MaxHeight="800" MaxWidth="900"
+        Title="File Encryptor" Height="650" Width="1100"
+        MinHeight="650" MinWidth="900"
+        MaxHeight="700" MaxWidth="1200"
         WindowStartupLocation="CenterScreen"
         
         WindowStyle="None"
@@ -16,318 +16,6 @@
         ResizeMode="CanResizeWithGrip"
         Foreground="#CCCCCC">
 
-    <Window.Resources>
-        <Style x:Key="ModernComboBoxItem" TargetType="ComboBoxItem">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#DDDDDD"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="bd" 
-                        Background="{TemplateBinding Background}"
-                        BorderThickness="0" 
-                        Padding="{TemplateBinding Padding}"
-                        SnapsToDevicePixels="True">
-                            <ContentPresenter />
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#3E3E42"/>
-                                <Setter Property="Foreground" Value="White"/>
-                            </Trigger>
-
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#4CC2FF"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
-
-                <Border x:Name="Border" 
-                Grid.ColumnSpan="2"
-                CornerRadius="8"
-                Background="#353535"
-                BorderBrush="#555555"
-                BorderThickness="1" />
-
-                <Path x:Name="Arrow" 
-              Grid.Column="1" 
-              HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              Data="M 0 0 L 4 4 L 8 0" 
-              Stroke="#AAAAAA"
-              StrokeThickness="1.5"/>
-            </Grid>
-
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="Border" Property="BorderBrush" Value="#888888"/>
-                    <Setter TargetName="Arrow" Property="Stroke" Value="White"/>
-                </Trigger>
-
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="Border" Property="BorderBrush" Value="#4CC2FF"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <Style x:Key="ModernComboBox" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ModernComboBoxItem}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Name="ToggleButton" 
-                                  Template="{StaticResource ComboBoxToggleButton}" 
-                                  Grid.Column="2" 
-                                  Focusable="false"
-                                  IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
-                                  ClickMode="Press"/>
-
-                            <ContentPresenter Name="ContentSite"
-                                      IsHitTestVisible="False" 
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                      Margin="15,0,30,0"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Left" />
-
-                            <Popup Name="Popup"
-                           Placement="Bottom"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           AllowsTransparency="True" 
-                           Focusable="False"
-                           PopupAnimation="Slide">
-
-                                <Grid Name="DropDown"
-                              SnapsToDevicePixels="True"                
-                              MinWidth="{TemplateBinding ActualWidth}"
-                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
-
-                                    <Border x:Name="DropDownBorder"
-                                            Background="#2D2D30"
-                                            BorderThickness="1"
-                                            BorderBrush="#555555"
-                                            CornerRadius="8"
-                                            Margin="0,5,0,0">
-                                        <Border.Effect>
-                                            <DropShadowEffect Color="Black" BlurRadius="10" Opacity="0.5"/>
-                                        </Border.Effect>
-
-                                        <ScrollViewer Margin="2" SnapsToDevicePixels="True">
-                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                        </ScrollViewer>
-                                    </Border>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ModernProgressBar" TargetType="ProgressBar">
-            <Setter Property="Height" Value="10"/>
-            <Setter Property="Foreground" Value="#6C5CE7"/>
-            <Setter Property="Background" Value="#1E1E1E"/>
-            <Setter Property="BorderThickness" Value="0"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ProgressBar">
-                        <Grid x:Name="TemplateRoot">
-
-                            <Border Name="PART_Track" 
-                                Background="{TemplateBinding Background}" 
-                                CornerRadius="5" 
-                                BorderThickness="0"/>
-
-                            <Border Name="PART_Indicator" 
-                                CornerRadius="5" 
-                                HorizontalAlignment="Left">
-
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                        <GradientStop Color="#4CC2FF" Offset="0.0"/>
-                                        <GradientStop Color="#6C5CE7" Offset="1.0"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#6C5CE7" 
-                                                  BlurRadius="8" 
-                                                  ShadowDepth="0" 
-                                                  Opacity="0.4"/>
-                                </Border.Effect>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style x:Key="ModernTextBox" TargetType="TextBox">
-            <Setter Property="Background" Value="#353535"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#555555"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="CaretBrush" Value="White"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
-                            <Grid>
-                                <TextBlock x:Name="placeholder"
-                                           Text="{TemplateBinding Tag}"
-                                           Foreground="#AAAAAA"
-                                           Margin="{TemplateBinding Padding}"
-                                           VerticalAlignment="Center"
-                                           IsHitTestVisible="False"
-                                           Visibility="Collapsed"/>
-                                <ScrollViewer x:Name="PART_ContentHost"
-                                              Background="Transparent"
-                                              BorderThickness="0"/>
-                            </Grid>
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="Text" Value="">
-                                <Setter TargetName="placeholder" Property="Visibility" Value="Visible"/>
-                            </Trigger>
-
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#888888"/>
-                            </Trigger>
-
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#4CC2FF"/>
-                                <Setter TargetName="border" Property="BorderThickness" Value="2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="Button" x:Key="BaseButtonStyle">
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                                CornerRadius="8"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"/>
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Opacity" Value="0.6"/>
-                                <Setter Property="RenderTransform">
-                                    <Setter.Value>
-                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98" CenterX="0.5" CenterY="0.5"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Background" Value="#444444"/>
-                                <Setter Property="Foreground" Value="#888888"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <SolidColorBrush x:Key="AccentColor" Color="#0078D4"/>
-        <SolidColorBrush x:Key="AccentHoverColor" Color="#198ED6"/>
-        <SolidColorBrush x:Key="AccentPressedColor" Color="#0063B1"/>
-        <SolidColorBrush x:Key="SecondaryBorder" Color="#6E6E6E"/>
-        <SolidColorBrush x:Key="SecondaryText" Color="#DDDDDD"/>
-        
-        <Style TargetType="Button" x:Key="PrimaryButton" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="{StaticResource AccentColor}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource AccentHoverColor}"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="{StaticResource AccentPressedColor}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="Button" x:Key="SecundaryButton" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="#555555"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="#CCCCCC"/>
-        </Style>
-
-        <Style TargetType="Button" x:Key="DestructiveButton" BasedOn="{StaticResource SecundaryButton}">
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="Background" Value="#DDDDDD"/>
-            <Setter Property="BorderThickness" Value="0"/>
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightGray"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="{StaticResource SecondaryText}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        
-    </Window.Resources>
-    
     <Border Background="#2D2D30"
             CornerRadius="15"
             BorderBrush="#3E3E42"
@@ -348,13 +36,28 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0,0,0,0">
-                <TextBlock Text="🔒Secure File Encryptor" 
-                           Foreground="#CCCCCC" 
-                           VerticalAlignment="Center" 
-                           Margin="5,0,0,0"
-                           FontWeight="Bold"
-                           FontSize="20"
-                           FontFamily="Segoe UI Semibold"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <ToggleButton x:Name="btnToggleMenu" 
+                      Content="☰" 
+                      Foreground="#CCCCCC" 
+                      Background="Transparent" 
+                      BorderThickness="0" 
+                      FontSize="20" 
+                      Cursor="Hand"
+                      Click="BtnToggleMenu_Click"
+                      Width="40" Height="40">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+
+                    <TextBlock Text="🔒 Secure File Encryptor" Foreground="#CCCCCC" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"/>
+                </StackPanel>
+                
                 <Button x:Name="btn_Close" Content="✕" 
                         HorizontalAlignment="Right" 
                         Width="40" 
@@ -373,122 +76,49 @@
                     </Button.Resources>
                 </Button>
             </Grid>
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid Margin="20,20,20,20" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Margin="0,0,0,20">
-                    <TextBlock Text="Choose a file:" FontWeight="Bold"/>
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="txtFilePath" Style="{StaticResource ModernTextBox}" Tag="Choose or drop a file..." 
-                                 MouseDoubleClick="txtFilePath_DoubleClick" IsReadOnly="True" Padding="5"
-                                 
-                                 AllowDrop="True"
-                                 PreviewDragOver="txtFilePath_PreviewDragOver"
-                                 PreviewDrop="txtFilePath_PreviewDrop"
-                                 DragLeave="txtFilePath_DragLeave"/>
-                        <Button x:Name="btnBrowse" Style="{StaticResource PrimaryButton}" 
-                                Content="Browse..." Foreground="LightGray"
-                                Width="75" Margin="5,0,5,0" Grid.Column="1" Click="BtnBrowse_Click"/>
-                    </Grid>
-                </StackPanel>
+                <Border x:Name="SideMenu" 
+                        Grid.Column="0" 
+                        Width="200" 
+                        Background="#252526" 
+                        CornerRadius="0,0,0,15" 
+                        BorderBrush="#3E3E42" 
+                        BorderThickness="0,1,1,0"
+                        ClipToBounds="True">
+                    <StackPanel Margin="10">
+                        <Button x:Name="BtnEncryption" Click="Menu_Encryption_Click" Style="{StaticResource SecundaryButton}" Margin="0,0,0,10" HorizontalContentAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
 
-                <GroupBox Header="Cryptography settings" Grid.Row="1" Margin="0,0,0,20" BorderThickness="0">
-                    <UniformGrid Columns="3" Margin="10">
-                        <StackPanel Margin="5">
-                            <TextBlock Text="Algorithm:" Foreground="Gray" FontSize="11"/>
-                            <ComboBox x:Name="cbAlgorithm" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
-                        </StackPanel>
-                        <StackPanel Margin="5">
-                            <TextBlock Text="Cipher Mode:" Foreground="Gray" FontSize="11"/>
-                            <ComboBox x:Name="cbCipherMode" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
-                        </StackPanel>
-                        <StackPanel Margin="5">
-                            <TextBlock Text="Padding Mode:" Foreground="Gray" FontSize="11"/>
-                            <ComboBox x:Name="cbPaddingMode" Style="{StaticResource ModernComboBox}" Height="30" SelectedIndex="0" Margin="0, 8, 0, 0"/>
-                        </StackPanel>
-                    </UniformGrid>
-                </GroupBox>
+                                <Path Data="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" 
+                                      Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 
+                                      Height="18" Width="18" Stretch="Uniform"/>
 
-                <GroupBox Header="Hash Settings" Grid.Row="2" Margin="0,0,0,20" BorderThickness="0">
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                                <TextBlock Text="Encryptions" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Button x:Name="BtnSteganography" Click="Menu_Stegano_Click" Style="{StaticResource SecundaryButton}" Margin="0,0,0,10" HorizontalContentAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
 
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
-                            <TextBlock Text="Algorithm:" Margin="0,0,0,5" Foreground="Gray"/>
-                            <ComboBox x:Name="cbHashAlgo" 
-                                Style="{StaticResource ModernComboBox}" 
-                                Height="30" 
-                                SelectedIndex="0" 
-                                HorizontalAlignment="Stretch"/>
-                        </StackPanel>
+                                <Path Data="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"
+                                       Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 
+                                       Height="18" Width="18" Stretch="Uniform"/>
 
-                        <Button x:Name="btnSolveHashing" 
-                            Grid.Row="0" Grid.Column="1"
-                            Content="Get Hash" 
-                            Height="30" Width="120" 
-                            Style="{StaticResource PrimaryButton}" 
-                            Margin="0,0,0,10"
-                            VerticalAlignment="Bottom"
-                            Click="btnSolveHashing_Click"/>
+                                <TextBlock Text="Steganography" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                            <TextBlock Text="Hash Result:" Margin="0,0,0,5" Foreground="Gray" FontSize="11"/>
-
-                            <TextBox x:Name="txtHashResult" 
-                                 Style="{StaticResource ModernTextBox}" 
-                                 Tag="Result..." 
-                                 Padding="6"
-                                 IsReadOnly="True"
-                                 HorizontalAlignment="Stretch"/>
-                        </StackPanel>
-
-                    </Grid>
-                </GroupBox>
-
-                <StackPanel Grid.Row="3" Margin="0,0,0,20">
-                    <TextBlock Text="Password:" FontWeight="Bold"/>
-                    <TextBox Style="{StaticResource ModernTextBox}" Tag="Password..." 
-                             FontSize="12" Width="250" HorizontalAlignment="Left"
-                             x:Name="txtPassword" Margin="0,5,0,0" Padding="5"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="4" VerticalAlignment="Bottom">
-                    <TextBlock x:Name="lblStatus" Text="Waiting..." HorizontalAlignment="Center" Margin="0,0,0,5"/>
-
-                    <ProgressBar x:Name="progressBar" Style="{StaticResource ModernProgressBar}" Height="20" Minimum="0" Maximum="100"/>
-
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button x:Name="btnEncrypt" Style="{StaticResource PrimaryButton}" Content="🔒 Encrypt" Height="35" Click="BtnEncrypt_Click"/>
-                        <Button x:Name="btnDecrypt" Style="{StaticResource PrimaryButton}" Content="🔓 Decrypt" Grid.Column="2" Height="35" Click="BtnDecrypt_Click"/>
-                        <Button x:Name="btnCancel" Style="{StaticResource DestructiveButton}" Content="Cancel" Grid.Column="4" Height="35" Width="80" IsEnabled="False" Click="BtnCancel_Click" Cursor="Hand"/>
-                    </Grid>
-                </StackPanel>
+                <ContentControl x:Name="PageContainer" Grid.Column="1"/>
             </Grid>
+
         </Grid>
     </Border>
 </Window>
