@@ -32,7 +32,8 @@ The project is built with **.NET / C#** and follows clean coding principles:
 
 ## 📸 Screenshots
 
-<img width="793" height="647" alt="Screenshot 2026-01-11 202957" src="https://github.com/user-attachments/assets/c0858e09-52fa-450c-94f8-3fbe7a77047c" />
+<img width="1088" height="637" alt="image" src="https://github.com/user-attachments/assets/5baf5a96-aa77-4e06-a3d6-c35a20983e87" />
+
 <img width="1085" height="638" alt="image" src="https://github.com/user-attachments/assets/124e5174-fe43-4e1c-8a38-327fb44eb9a3" />
 
 ## 📄 License
