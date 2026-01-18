@@ -49,7 +49,7 @@ namespace FileEncryptor.Core.Services
             int currentByte = 0;
             int bitCount = 0;
 
-            System.Collections.Generic.List<byte> messageBytes = new();
+            List<byte> messageBytes = new();
 
             for (int y = 0; y < image.Height; y++)
             {

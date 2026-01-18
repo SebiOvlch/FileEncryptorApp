@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="FileEncryptor.UI.Views.SteganoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FileEncryptor.UI.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800"
+             Background="Transparent">
+
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="1.2*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" 
+                Background="#2D2D30" 
+                BorderBrush="#444444" 
+                BorderThickness="1" 
+                CornerRadius="8">
+            <Grid>
+                <TextBlock Text="No image loaded" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Foreground="#555555" 
+                           FontStyle="Italic"/>
+
+                <Image x:Name="ImgPreview" Stretch="Uniform" Margin="5"/>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Column="2">
+
+            <TextBlock Text="Operations" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="Step 1: Image Source" Foreground="#AAAAAA" FontSize="13" Margin="0,0,0,8"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="TxtFileName" 
+                             Style="{DynamicResource ModernTextBox}" 
+                             Tag="No file selected"
+                             MouseDoubleClick="TxtFileName_DoubleClick"
+                             AllowDrop="True"
+                             PreviewDragOver="TxtFileName_PreviewDragOver"
+                             PreviewDrop="TxtFileName_PreviewDrop"
+                             DragLeave="TxtFileName_DragLeave"
+                             IsReadOnly="True" Padding="5"
+                             Foreground="#DDDDDD"/>
+
+                    <Button x:Name="BtnLoad" 
+                            Grid.Column="2"
+                            Content="📁 Browse" 
+                            Style="{DynamicResource SecundaryButton}" 
+                            Width="80"
+                            Click="BtnLoad_Click"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="Step 2: Secret Message" Foreground="#AAAAAA" FontSize="13" Margin="0,0,0,8"/>
+
+                <TextBox x:Name="TxtMessage" 
+                         Style="{DynamicResource ModernTextBox}"
+                         Tag="Type the secret text here..."
+                         Height="100" 
+                         TextWrapping="Wrap" 
+                         AcceptsReturn="True" 
+                         VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="Step 3: Execution" Foreground="#AAAAAA" FontSize="13" Margin="0,0,0,8"/>
+
+                <Button x:Name="BtnEncrypt" 
+                        Style="{DynamicResource PrimaryButton}" 
+                        Margin="0,0,0,10"
+                        Click="BtnEncrypt_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔒  Encrypt &amp; Save" />
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="BtnDecrypt" 
+                        Style="{DynamicResource SecundaryButton}" 
+                        Click="BtnDecrypt_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔓  Decrypt (Read)" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <Border Background="#252526" CornerRadius="5" Padding="10" BorderBrush="#3E3E42" BorderThickness="1" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="Status:" FontWeight="SemiBold" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,2"/>
+                    <TextBlock x:Name="TxtStatus" Text="Waiting..." Foreground="{DynamicResource AccentColor}" TextWrapping="Wrap" FontSize="13"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
